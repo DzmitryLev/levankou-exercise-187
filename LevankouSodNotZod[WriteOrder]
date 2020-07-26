@@ -1,0 +1,62 @@
+package edu.cpt187.levankou.participation;
+
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+public class WriteOrder 
+{ // Open the brace of the WriteOrder class
+
+	// Declare and initialize variables
+	private boolean fileFoundFlag = false;
+	private String masterFileName = "";
+	private int recordCount = 0;
+
+	// Constructor
+	public WriteOrder(String borrowedFileName) 
+	{ // Open the brace of constructor
+		masterFileName = borrowedFileName;
+	} // End the brace of constructor
+
+	// Set method
+	public void setWriteOrder(int borrowedItemID, String borrowedItemName, 
+			double borrowedItemPrice, int borrowedQuantity, double borrowedOrderCost) 
+	{  // Open the brace of the method
+		try
+		{ // Open the brace of try
+			// Instantiate PrintWriter with the file name borrowed from main and true or false
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+			// Write one record with the borrowed values
+			filePW.printf("\n%d\t%s\t%.2f\t%d\t%.2f\n", borrowedItemID, borrowedItemName, 
+					borrowedItemPrice, borrowedQuantity, borrowedOrderCost);
+			fileFoundFlag = true;
+			// Close the file
+			filePW.close();
+			recordCount++;
+		} // End the brace of try
+		catch(IOException ex)
+		{ // Open the brace of catch
+			fileFoundFlag = false;
+		} // End the brace of catch
+	} // End the brace of the method
+
+	// Get method
+	public boolean getFileFoundFlag() 
+	{ // Open the brace of the method
+		return fileFoundFlag;
+	} // End the brace of the method
+
+	// Get method
+	public String getFileName() 
+	{ // Open the brace of the method
+		return masterFileName;
+	} // End the brace of the method
+
+	// Get method
+	public int getRecordCount() 
+	{ // Open the brace of the method
+		return recordCount;
+	} // End the brace of the method
+
+} // End the brace of the WriteOrder class
+
