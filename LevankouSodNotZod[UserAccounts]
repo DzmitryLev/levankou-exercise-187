@@ -1,0 +1,139 @@
+package edu.cpt187.levankou.participation;
+
+import java.io.FileInputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class UserAccounts 
+{ // Open the brace of the UserAccounts class
+
+	// Declare and initialize constants
+	private final int NOT_FOUND = -1;
+	private final int RESET_VALUE = 0;
+	private final int MAXIMUM_RECORDS = 50;
+
+	// Declare and initialize variables
+	private String[] userNames = new String[MAXIMUM_RECORDS];
+	private String[] passwords = new String[MAXIMUM_RECORDS];
+	private boolean fileFoundFlag = false;
+	private String masterFileName = "";
+	private int recordCount = 0;
+	private int searchedIndex = 0;
+
+	// Constructor
+	public UserAccounts(String borrowedFileName) 
+	{ // Open the brace of constructor
+		masterFileName = borrowedFileName;
+	} // End the brace of constructor
+
+	// Set method
+	public void setUserAccountArrays()
+	{ // Open the brace of the method
+		recordCount = RESET_VALUE;
+		try
+		{ // Open the brace of try
+			Scanner infile = new Scanner(new FileInputStream(masterFileName));
+			while (infile.hasNext() == true && recordCount < MAXIMUM_RECORDS)
+			{ // Open the while
+				userNames[recordCount] = infile.next();
+				passwords[recordCount] = infile.next();
+				recordCount++;
+			} // End of while
+			infile.close();
+			fileFoundFlag = true;
+		} // End of try
+		catch (IOException ex)
+		{ // Open a catch
+			fileFoundFlag = false;
+		} // End of a catch
+	} // End the brace of the method
+
+	// Set method
+	public void setSearchedIndex(String borrowedUserName)
+	{ // Open the brace of the method
+		searchedIndex = getSeqSearch(borrowedUserName);
+	} // End the brace of the method
+
+	// Set method
+	public void setSearchedIndex(String borrowedUserName, String borrowedPassword)
+	{ // Open the brace of the method
+		searchedIndex = getSeqSearch(borrowedUserName);
+		if (searchedIndex == RESET_VALUE && getPasswordMatch(borrowedPassword) == false)
+		{ // Open the if
+			searchedIndex = NOT_FOUND;
+		} // End of if
+	} // End the brace of the method
+
+	// Set method
+	public void setWriteOneRecord(String borrowedUseName, String borrowedPassword)
+	{ // Open the brace of the method
+		try
+		{ // Open the brace of try
+			// Instantiate PrintWriter with the file name borrowed from main and true or false
+			PrintWriter filePW = new PrintWriter(new FileWriter(masterFileName, true));
+			filePW.printf("%s\t%s%n", borrowedUseName, borrowedPassword);
+			recordCount++;
+			filePW.close();
+			fileFoundFlag = true;
+		} // End of try
+		catch (IOException ex)
+		{ // Open a catch
+			fileFoundFlag = false;
+		} // End of a catch
+		setUserAccountArrays();
+	} // End the brace of the method
+
+	// Get method
+	public int getSeqSearch(String borrowedUserName)
+	{ // Open the brace of the method
+		int localIndex = RESET_VALUE;
+		int localFound = NOT_FOUND;
+		while (localIndex < recordCount)
+		{ // Open the while
+			if (userNames[localIndex].equalsIgnoreCase(borrowedUserName))
+			{ // Open the if
+				localFound = localIndex;
+				localIndex = recordCount;
+			} // End of if
+			else
+			{ // Open the else
+				localIndex++;
+			} // End of else
+		} // End of while
+		return localFound;
+	} // End the brace of the method
+
+	// Get method
+	public boolean getPasswordMatch(String borrowedPassword)
+	{ // Open the brace of the method
+		// Case matters
+		return passwords[searchedIndex].equals(borrowedPassword);
+	} // End the brace of the method
+
+	// Get method
+	public boolean getFileFoundFlag()
+	{ // Open the brace of the method
+		return fileFoundFlag;
+	} // End the brace of the method
+
+	// Get method
+	public String getFileName()
+	{ // Open the brace of the method
+		return masterFileName;
+	} // End the brace of the method
+
+	// Get method
+	public int getRecordCount()
+	{ // Open the brace of the method
+		return recordCount;
+	} // End the brace of the method
+
+	// Get method
+	public int getSearchedIndex()
+	{ // Open the brace of the method
+		return searchedIndex;
+	} // End the brace of the method
+
+} // End the brace of the UserAccounts class
